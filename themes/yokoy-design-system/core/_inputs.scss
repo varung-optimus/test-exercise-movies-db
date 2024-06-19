@@ -1,0 +1,6 @@
+input,
+select {
+  &.error {
+    border-color: $error-color;
+  }
+}
