@@ -1,10 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Actor } from '../../actors/types/actor.model';
-import { actorsService } from '../../actors/actors.service';
-import { Movie } from '../types/movie.model';
-import { moviesService } from './../movies.service';
+import { Actor } from '../../../actors/types/actor.model';
+import { actorsService } from '../../../actors/actors.service';
+import { Movie } from '../../types/movie.model';
+import { moviesService } from '../../movies.service';
 import { ERROR_PRIORITY, InternalError } from 'src/app/shared/types/error.model';
 import { ErrorHandlerService } from 'src/app/shared/error-handler.service';
 

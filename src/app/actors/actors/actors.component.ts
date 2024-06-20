@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Actor } from '../types/actor.model';
 import { actorsService } from '../actors.service';
-import { ActorDialogComponent } from './../actor-dialog/actor-dialog.component';
+import { ActorDialogComponent } from '../helpers/actor-dialog/actor-dialog.component';
 import { ERROR_PRIORITY, InternalError } from 'src/app/shared/types/error.model';
 import { ErrorHandlerService } from 'src/app/shared/error-handler.service';
 import { FormBuilder, FormGroup } from '@angular/forms';

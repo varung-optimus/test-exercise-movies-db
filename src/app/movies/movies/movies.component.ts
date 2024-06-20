@@ -2,7 +2,7 @@ import { Component, OnDestroy } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Movie } from "../types/movie.model";
 import { moviesService } from "./../movies.service";
-import { MovieDialogComponent } from "./../movie-dialog/movie-dialog.component";
+import { MovieDialogComponent } from "../helpers/movie-dialog/movie-dialog.component";
 import { DEFAULT_MOVIE_FILTER, MovieFilter } from "../types/movie-filter.model";
 import { ErrorHandlerService } from "src/app/shared/error-handler.service";
 import { ERROR_PRIORITY, InternalError } from "src/app/shared/types/error.model";
