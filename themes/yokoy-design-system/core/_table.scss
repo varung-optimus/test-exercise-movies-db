@@ -13,3 +13,16 @@ td {
 tr {
     border-bottom: 2px solid #aea8ac;
 }
+
+
+.table-link {
+    color: blue;
+    cursor: pointer;
+}
+
+.table-header {
+    margin: 8px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

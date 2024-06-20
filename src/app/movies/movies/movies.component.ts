@@ -8,6 +8,7 @@ import { ErrorHandlerService } from "src/app/shared/error-handler.service";
 import { ERROR_PRIORITY, InternalError } from "src/app/shared/types/error.model";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Subscription, debounceTime } from "rxjs";
+import { DEFAULT_SETTINGS } from "src/app/shared/types/default-settings.const";
 
 @Component({
   selector: "app-movies",
@@ -16,10 +17,10 @@ import { Subscription, debounceTime } from "rxjs";
 })
 export class MoviesComponent implements OnDestroy {
   movies: Movie[] = [];
-  filter: MovieFilter = DEFAULT_MOVIE_FILTER;
   pageIndex = 1;
-  dialogWidth = '300px';
-  debounceTime = 500;
+  filter: MovieFilter = DEFAULT_MOVIE_FILTER;
+  dialogWidth = DEFAULT_SETTINGS.MODAL_WIDTH;
+  debounceTime = DEFAULT_SETTINGS.KEY_CHANGES_DELAY;
   filterForm: FormGroup = this.formBuilder.group({
     title: [this.filter.title],
     year: [this.filter.year],

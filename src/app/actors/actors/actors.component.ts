@@ -8,6 +8,7 @@ import { ErrorHandlerService } from 'src/app/shared/error-handler.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActorFilter, DEFAULT_ACTOR_FILTER } from '../types/actor-filter.model';
 import { Subscription, debounceTime } from 'rxjs';
+import { DEFAULT_SETTINGS } from 'src/app/shared/types/default-settings.const';
 
 @Component({
   selector: 'app-actors',
@@ -18,14 +19,13 @@ export class ActorsComponent implements OnDestroy {
   actors: Actor[] = [];
   pageIndex = 1;
   filter: ActorFilter = DEFAULT_ACTOR_FILTER;
-  dialogWidth = '300px';
-  debounceTime = 500;
+  dialogWidth = DEFAULT_SETTINGS.MODAL_WIDTH;
+  debounceTime = DEFAULT_SETTINGS.KEY_CHANGES_DELAY;
   filterForm: FormGroup = this.formBuilder.group({
     name: [this.filter.name]
   });
 
   // Private
-  private search = '';
   private keyChangesSubscription: Subscription | undefined;
 
   constructor(
