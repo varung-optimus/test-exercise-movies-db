@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { actorsService } from '../../actors.service';
 import { Actor } from 'src/app/actors/types/actor.model';
+import { ERROR_PRIORITY, InternalError } from 'src/app/shared/types/error.model';
+import { ErrorHandlerService } from 'src/app/shared/error-handler.service';
 
 export interface DialogData {
   actor: Actor;
@@ -22,15 +24,28 @@ export class ActorDialogComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private actorsService: actorsService,
-    private dialogRef: MatDialogRef<ActorDialogComponent>
-  ) {}
+    private dialogRef: MatDialogRef<ActorDialogComponent>,
+    private errorService: ErrorHandlerService
+  ) { }
 
-  async add() {
+  /**
+   * Add actor
+   */
+  add() {
     this.submitted = true;
-    this.formGroup.markAllAsTouched();
-    if (this.formGroup.valid) {
-      await this.actorsService.create(this.formGroup.value as any);
-      this.dialogRef.close();
+    if (this.formGroup.invalid) {
+      this.formGroup.markAllAsTouched();
+      return;
     }
+    this.actorsService.create(this.formGroup.value as any).subscribe((response) => {
+      this.dialogRef.close();
+    }, (err: Error) => {
+      let error: InternalError = {
+        friendlyMessage: `Unable to create actor, please try again later!`,
+        message: err.message,
+        priority: ERROR_PRIORITY.MAJOR
+      };
+      this.errorService.handle(error);
+    })
   }
 }

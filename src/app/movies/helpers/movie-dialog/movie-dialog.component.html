@@ -3,7 +3,7 @@
   <h2 *ngIf="data.movie?.id">Edit movie with id = {{ data.movie.id }}</h2>
 
   <form [formGroup]="movieForm">
-    <section>
+    <div>
       <input placeholder="title" type="text" formControlName="title"
         [class.error]="submitted && movieForm.get('title')?.errors" />
 
@@ -14,19 +14,19 @@
           * Title is required
         </label>
       </div>
-    </section>
+    </div>
 
-    <section>
+    <div>
       <input placeholder="year" type="number" formControlName="year"
         [class.error]="submitted && movieForm.get('year')?.errors" />
-    </section>
+    </div>
 
-    <section>
+    <div>
       <select multiple placeholder="actors" formControlName="actors">
         <option value="" disabled selected>Select actors</option>
         <option *ngFor="let a of actors" [value]="a.name">{{ a.name }}</option>
       </select>
-    </section>
+    </div>
     <button (click)="submit()" class="submit">Save!</button>
     <button *ngIf="data.movie?.id" (click)="delete()" class="submit">Delete!</button>
 

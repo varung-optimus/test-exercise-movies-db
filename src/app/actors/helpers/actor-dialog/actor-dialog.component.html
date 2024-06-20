@@ -6,6 +6,17 @@
       formControlName="name"
       [class.error]="submitted && formGroup.get('name')?.errors"
     />
+    
     <button (click)="add()" class="submit">Add!</button>
+
+    <div>
+      <div
+        *ngIf="formGroup.controls['name'].invalid && (formGroup.controls['name'].dirty || formGroup.controls['name'].touched)"
+        class="text-error">
+        <label *ngIf="formGroup.controls['name'].hasError('required')">
+          * Name is required
+        </label>
+      </div>
+    </div>
   </form>
 </div>
