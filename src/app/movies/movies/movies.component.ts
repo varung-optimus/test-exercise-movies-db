@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Movie } from "../types/movie.model";
 import { moviesService } from "./../movies.service";
@@ -7,14 +7,14 @@ import { DEFAULT_MOVIE_FILTER, MovieFilter } from "../types/movie-filter.model";
 import { errorHandlerService } from "src/app/shared/error-handler.service";
 import { ERROR_PRIORITY, InternalError } from "src/app/shared/types/error.model";
 import { FormBuilder, FormGroup } from "@angular/forms";
-import { debounceTime } from "rxjs";
+import { Subscription, debounceTime } from "rxjs";
 
 @Component({
   selector: "app-movies",
   templateUrl: "./movies.component.html",
   styleUrls: ["./movies.component.scss"],
 })
-export class MoviesComponent {
+export class MoviesComponent implements OnDestroy {
   movies: Movie[] = [];
   filter: MovieFilter = DEFAULT_MOVIE_FILTER;
   pageIndex = 1;
@@ -25,6 +25,9 @@ export class MoviesComponent {
     year: [this.filter.year],
     rate: [this.filter.rate]
   });
+
+  // Private
+  private keyChangesSubscriptions: Subscription[] = [];
 
   constructor(
     private moviesService: moviesService,
@@ -44,6 +47,12 @@ export class MoviesComponent {
    */
   ngOnInit() {
     this._getMovies();
+  }
+
+  ngOnDestroy(): void {
+    for (let subscription of this.keyChangesSubscriptions) {
+      subscription.unsubscribe();
+    }
   }
 
   /**
@@ -103,12 +112,15 @@ export class MoviesComponent {
    * @param controlName control name
    */
   private _subscribeToControlKeyChanges(controlName: string) {
-    this.filterForm.controls[controlName].valueChanges.pipe(
+    let keyChangeSubscription = this.filterForm.controls[controlName].valueChanges.pipe(
       debounceTime(this.debounceTime)
     ).subscribe(value => {
       this.filter[controlName as keyof MovieFilter] = value;
       this._getMovies();
-    })
+    });
+
+    // Pushing the subscription so it can be destroyed when component destroys
+    this.keyChangesSubscriptions.push(keyChangeSubscription);
   }
 
   /**
