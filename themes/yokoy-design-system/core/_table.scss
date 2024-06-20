@@ -7,21 +7,21 @@ thead td {
 }
 
 td {
-    padding: 9px;
+    padding: $unit * 2;
 }
 
 tr {
-    border-bottom: 2px solid #aea8ac;
+    border-bottom: 2px solid $gray-500;
 }
 
 
 .table-link {
-    color: blue;
+    color: $link-color;
     cursor: pointer;
 }
 
 .table-header {
-    margin: 8px 25px;
+    margin: $unit * 2 $unit * 6;
     display: flex;
     align-items: center;
     justify-content: space-between;

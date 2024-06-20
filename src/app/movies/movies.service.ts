@@ -54,7 +54,7 @@ export class moviesService {
    * @param movie 
    * @returns 
    */
-  edit(id: string, movie: Partial<Movie>): Observable<Movie> {
+  update(id: string, movie: Partial<Movie>): Observable<Movie> {
     return this.http.patch(`${environment.domain}${environment.api.movies}/${id}`, movie).pipe(
       map(response => <Movie>response)
     );

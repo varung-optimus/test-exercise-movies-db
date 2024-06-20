@@ -1,4 +1,4 @@
-<div class="modal-content" style="padding: 20px">
+<div class="modal-content">
   <h2 *ngIf="!data.movie?.id">Add new movie</h2>
   <h2 *ngIf="data.movie?.id">Edit movie with id = {{ data.movie.id }}</h2>
 
@@ -20,6 +20,6 @@
       <option *ngFor="let a of actors" [value]="a.name">{{ a.name }}</option>
     </select>
     <button (click)="submit()" class="submit">Save!</button>
-    <button (click)="delete()" class="submit">Delete!</button>
+    <button *ngif="data.movie?.id" (click)="delete()" class="submit">Delete!</button>
   </form>
 </div>
