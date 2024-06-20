@@ -8,4 +8,5 @@ export interface MovieFilter {
  * Default movie filter setting
  */
 export const DEFAULT_MOVIE_FILTER  = {
+    // If we need default filter, these can come here
 }

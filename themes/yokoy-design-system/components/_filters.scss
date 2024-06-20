@@ -1,7 +1,8 @@
 .filters {
     display: flex;
+    margin-bottom: $unit * 3;
 }
 
 .filters>* {
-    margin-right: 12px;
+    margin-right: $unit * 3;
 }
