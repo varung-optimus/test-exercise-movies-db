@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import { Movie } from './types/movie.model';
 import { environment } from 'src/environments/environment.development';
+import { MovieFilter } from './types/movie-filter.model';
 
 @Injectable({ providedIn: 'root' })
 export class moviesService {
@@ -16,25 +17,10 @@ export class moviesService {
    */
   getMovies(
     page: number,
-    filter: { title?: string; year?: number; rate?: number }
+    filter: MovieFilter
   ): Promise<Movie[]> {
     let url = `${environment.domain}${environment.api.movies}`;
-    Object.entries(filter)
-      .filter(([key, value]) => !!value)
-      .forEach(([key, value], index) => {
-        const prefix = index === 0 ? '?' : '&';
-        switch (key) {
-          case 'title':
-            url += `${prefix}title_like=${value}`;
-            break;
-          case 'year':
-            url += `${prefix}year=${value}`;
-            break;
-          case 'rate':
-            url += `${prefix}rate=${value}`;
-            break;
-        }
-      });
+    url = this._getFilterAppliedUrl(filter, url);
     return firstValueFrom(this.http.get(url)) as any;
   }
 
@@ -81,5 +67,36 @@ export class moviesService {
     return firstValueFrom(
       this.http.delete(`${environment.domain}${environment.api.movies}/${id}`)
     ) as any;
+  }
+
+  /***
+   * =======
+   * PRIVATE METHODS
+   * =======
+   */
+
+  /**
+   * Gets base url and filter criteria - builds filter url and returns it
+   * @param filter 
+   * @param baseUrl 
+   */
+  private _getFilterAppliedUrl(filter: MovieFilter, baseUrl: string) {
+    Object.entries(filter)
+      .filter(([key, value]) => !!value)
+      .forEach(([key, value], index) => {
+        const prefix = index === 0 ? '?' : '&';
+        switch (key) {
+          case 'title':
+            baseUrl += `${prefix}title_like=${value}`;
+            break;
+          case 'year':
+            baseUrl += `${prefix}year=${value}`;
+            break;
+          case 'rate':
+            baseUrl += `${prefix}rate=${value}`;
+            break;
+        }
+      });
+      return baseUrl;
   }
 }
