@@ -2,16 +2,23 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { Movie } from './types/movie.model';
+import { environment } from 'src/environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class moviesService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
+  /**
+   * Get all movies based on pagination and applied filter
+   * @param page page index
+   * @param filter filter query
+   * @returns movies
+   */
   getAll(
     page: string,
     filter: { title?: string; year?: number; rate?: number }
   ): Promise<Movie[]> {
-    let url = 'http://localhost:3000/movies';
+    let url = `${environment.domain}${environment.api.movies}`;
     Object.entries(filter)
       .filter(([key, value]) => !!value)
       .forEach(([key, value], index) => {
@@ -31,27 +38,48 @@ export class moviesService {
     return firstValueFrom(this.http.get(url)) as any;
   }
 
+  /**
+   * Get a movie by id
+   * @param id 
+   * @returns 
+   */
   getSingle(id: string): Promise<Movie> {
     return firstValueFrom(
-      this.http.get('http://localhost:3000/movies/' + id)
+      this.http.get(`${environment.domain}${environment.api.movies}/${id}`)
     ) as any;
   }
 
+  /**
+   * Create a movie
+   * @param movie 
+   * @returns 
+   */
   create(movie: Partial<Movie>): Promise<Movie> {
     return firstValueFrom(
-      this.http.post('http://localhost:3000/movies', movie)
+      this.http.post(`${environment.domain}${environment.api.movies}`, movie)
     ) as any;
   }
 
+  /**
+   * Update a movie
+   * @param id 
+   * @param movie 
+   * @returns 
+   */
   edit(id: string, movie: Partial<Movie>): Promise<Movie> {
     return firstValueFrom(
-      this.http.patch('http://localhost:3000/movies/' + id, movie)
+      this.http.patch(`${environment.domain}${environment.api.movies}/${id}`, movie)
     ) as any;
   }
 
+  /**
+   * Delete a movie
+   * @param id 
+   * @returns 
+   */
   delete(id: string): Promise<Movie> {
     return firstValueFrom(
-      this.http.delete('http://localhost:3000/movies/' + id)
+      this.http.delete(`${environment.domain}${environment.api.movies}/${id}`)
     ) as any;
   }
 }
