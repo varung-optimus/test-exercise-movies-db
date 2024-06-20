@@ -4,10 +4,11 @@ import { Movie } from "../types/movie.model";
 import { moviesService } from "./../movies.service";
 import { MovieDialogComponent } from "./../movie-dialog/movie-dialog.component";
 import { DEFAULT_MOVIE_FILTER, MovieFilter } from "../types/movie-filter.model";
-import { errorHandlerService } from "src/app/shared/error-handler.service";
+import { ErrorHandlerService } from "src/app/shared/error-handler.service";
 import { ERROR_PRIORITY, InternalError } from "src/app/shared/types/error.model";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Subscription, debounceTime } from "rxjs";
+import { DEFAULT_SETTINGS } from "src/app/shared/types/default-settings.const";
 
 @Component({
   selector: "app-movies",
@@ -16,10 +17,10 @@ import { Subscription, debounceTime } from "rxjs";
 })
 export class MoviesComponent implements OnDestroy {
   movies: Movie[] = [];
-  filter: MovieFilter = DEFAULT_MOVIE_FILTER;
   pageIndex = 1;
-  dialogWidth = '300px';
-  debounceTime = 500;
+  filter: MovieFilter = DEFAULT_MOVIE_FILTER;
+  dialogWidth = DEFAULT_SETTINGS.MODAL_WIDTH;
+  debounceTime = DEFAULT_SETTINGS.KEY_CHANGES_DELAY;
   filterForm: FormGroup = this.formBuilder.group({
     title: [this.filter.title],
     year: [this.filter.year],
@@ -32,7 +33,7 @@ export class MoviesComponent implements OnDestroy {
   constructor(
     private moviesService: moviesService,
     private dialog: MatDialog,
-    private errorService: errorHandlerService,
+    private errorService: ErrorHandlerService,
     private formBuilder: FormBuilder
   ) { 
     this._subscribeToControlKeyChanges('title');
@@ -131,7 +132,7 @@ export class MoviesComponent implements OnDestroy {
       this.movies = response;
     }, (err: Error) => {
       let error: InternalError = {
-        friendlyMessage: `Unable to get movies from database, please try again later!`,
+        friendlyMessage: `Unable to get movies, please try again later!`,
         message: err.message,
         priority: ERROR_PRIORITY.CRITICAL
       };

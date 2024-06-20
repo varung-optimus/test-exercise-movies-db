@@ -1,29 +1,50 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
-import { actor } from './actor.model';
+import { Observable, firstValueFrom, map } from 'rxjs';
+import { Actor } from './types/actor.model';
+import { environment } from 'src/environments/environment';
+import { ActorFilter } from './types/actor-filter.model';
 
 @Injectable({ providedIn: 'root' })
 export class actorsService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  getAll(page: string, filter?: { name: string }): Promise<actor[]> {
-    let url = 'http://localhost:3000/actors';
+  /**
+   * Get all actors based on pagination and applied filter
+   * @param page page index
+   * @param filter filter query
+   * @returns actors
+   */
+  getActors(page: number, filter?: ActorFilter): Observable<Actor[]> {
+    let url = `${environment.domain}${environment.api.actors}`;
+    // apply filter to url (if applicable)
     if (filter?.name) {
       url += `?name_like=${filter.name}`;
     }
-    return firstValueFrom(this.http.get(url)) as any;
+    return this.http.get(url).pipe(
+      map(response => <Actor[]>response)
+    );
   }
 
-  getSingle(id: string): Promise<actor> {
-    return firstValueFrom(
-      this.http.get('http://localhost:3000/actors/' + id)
-    ) as any;
+  /**
+  * Get a actor by id
+  * @param id 
+  * @returns 
+  */
+  getActorById(id: string): Observable<Actor> {
+    return this.http.get(`${environment.domain}${environment.api.actors}/${id}`).pipe(
+      map(response => <Actor>response)
+    );
   }
 
-  create(actor: Partial<actor>): Promise<actor> {
-    return firstValueFrom(
-      this.http.post('http://localhost:3000/actors', actor)
-    ) as any;
+  /**
+   * Create an actor
+   * @param actor 
+   * @returns 
+   */
+  create(actor: Partial<Actor>): Observable<Actor> {
+    return this.http.post(`${environment.domain}${environment.api.actors}`, actor).pipe(
+      map(response => <Actor>response)
+    );
   }
 }

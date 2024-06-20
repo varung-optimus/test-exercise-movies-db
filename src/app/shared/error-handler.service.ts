@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { ERROR_PRIORITY, InternalError } from "./types/error.model";
 
 @Injectable({ providedIn: 'root' })
-export class errorHandlerService {
+export class ErrorHandlerService {
 
     /**
      * Handle errors
