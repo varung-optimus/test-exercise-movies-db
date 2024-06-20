@@ -80,6 +80,7 @@ Below are the main architectural changes done:
 * Leveraging power of SCSS rather than CSS and using variables.
 * Reactive form usage to implement validations and key change events.
 * Used environment files rather than hardcoding urls in services.
+* JSDoc conventions have been followed.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -94,6 +95,7 @@ Below are the main architectural changes done:
 - [ ] CDN to be used to deliver fonts, icons.
 - [ ] Unit tests and e2e automation can be implemented to support sanity test.
 - [ ] Performance testing and reporting via Google page speed / GTMetrix.
+- [ ] Using compodoc to generate technical documentation.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
