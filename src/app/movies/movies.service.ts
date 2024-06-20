@@ -14,8 +14,8 @@ export class moviesService {
    * @param filter filter query
    * @returns movies
    */
-  getAll(
-    page: string,
+  getMovies(
+    page: number,
     filter: { title?: string; year?: number; rate?: number }
   ): Promise<Movie[]> {
     let url = `${environment.domain}${environment.api.movies}`;
@@ -43,7 +43,7 @@ export class moviesService {
    * @param id 
    * @returns 
    */
-  getSingle(id: string): Promise<Movie> {
+  getMovieById(id: string): Promise<Movie> {
     return firstValueFrom(
       this.http.get(`${environment.domain}${environment.api.movies}/${id}`)
     ) as any;
