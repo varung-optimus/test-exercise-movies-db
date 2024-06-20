@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { movie } from "./../movie.model";
+import { Movie } from "../types/movie.model";
 import { moviesService } from "./../movies.service";
 import { MovieDialogComponent } from "./../movie-dialog/movie-dialog.component";
 
@@ -10,7 +10,7 @@ import { MovieDialogComponent } from "./../movie-dialog/movie-dialog.component";
   styleUrls: ["./movies.component.scss"],
 })
 export class MoviesComponent {
-  movies: movie[] = [];
+  movies: Movie[] = [];
   filter: { title?: string; year?: number; rate?: number } = {};
 
   constructor(
