@@ -54,7 +54,7 @@ export class MovieDialogComponent {
   }
 
   async delete() {
-    await this.moviesService.delete(this.data.movie.id.toString());
+    await this.moviesService.delete(this.data.movie.id);
     this.dialogRef.close();
   }
 }

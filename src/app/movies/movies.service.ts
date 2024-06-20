@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, firstValueFrom, map, of } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Movie } from './types/movie.model';
 import { environment } from 'src/environments/environment.development';
 import { MovieFilter } from './types/movie-filter.model';
@@ -31,10 +31,10 @@ export class moviesService {
    * @param id 
    * @returns 
    */
-  getMovieById(id: string): Promise<Movie> {
-    return firstValueFrom(
-      this.http.get(`${environment.domain}${environment.api.movies}/${id}`)
-    ) as any;
+  getMovieById(id: string): Observable<Movie> {
+    return this.http.get(`${environment.domain}${environment.api.movies}/${id}`).pipe(
+      map(response => <Movie>response)
+    );
   }
 
   /**
@@ -42,10 +42,10 @@ export class moviesService {
    * @param movie 
    * @returns 
    */
-  create(movie: Partial<Movie>): Promise<Movie> {
-    return firstValueFrom(
-      this.http.post(`${environment.domain}${environment.api.movies}`, movie)
-    ) as any;
+  create(movie: Partial<Movie>): Observable<Movie> {
+    return this.http.post(`${environment.domain}${environment.api.movies}`, movie).pipe(
+      map(response => <Movie>response)
+    );
   }
 
   /**
@@ -54,10 +54,10 @@ export class moviesService {
    * @param movie 
    * @returns 
    */
-  edit(id: string, movie: Partial<Movie>): Promise<Movie> {
-    return firstValueFrom(
-      this.http.patch(`${environment.domain}${environment.api.movies}/${id}`, movie)
-    ) as any;
+  edit(id: string, movie: Partial<Movie>): Observable<Movie> {
+    return this.http.patch(`${environment.domain}${environment.api.movies}/${id}`, movie).pipe(
+      map(response => <Movie>response)
+    );
   }
 
   /**
@@ -65,10 +65,10 @@ export class moviesService {
    * @param id 
    * @returns 
    */
-  delete(id: string): Promise<Movie> {
-    return firstValueFrom(
-      this.http.delete(`${environment.domain}${environment.api.movies}/${id}`)
-    ) as any;
+  delete(id: number): Observable<Movie> {
+    return this.http.delete(`${environment.domain}${environment.api.movies}/${id}`).pipe(
+      map(response => <Movie>response)
+    )
   }
 
   /***

@@ -1,4 +1,5 @@
 export interface InternalError {
+    friendlyMessage: string;
     message: string;
     code?: number;
     priority: ERROR_PRIORITY;

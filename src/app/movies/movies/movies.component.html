@@ -4,26 +4,23 @@
 </div>
 <h3>Yokoy movies</h3>
 <div class="table-header">
-  <div class="filters" style="margin-bottom: 12px">
+  <form [formGroup]="filterForm" class="filters" style="margin-bottom: 12px">
     <input
       type="text"
-      name="search"
+      formControlName="title"
       placeholder="Search"
-      (keyup)="onSearchChange($event)"
     />
     <input
       type="number"
-      name="year"
+      formControlName="year"
       placeholder="Year"
-      (keyup)="onYearChange($event)"
     />
     <input
       type="number"
-      name="rate"
+      formControlName="rate"
       placeholder="Rate"
-      (keyup)="onRateChange($event)"
     />
-  </div>
+  </form>
   <button (click)="add()">Add</button>
 </div>
 <table>
