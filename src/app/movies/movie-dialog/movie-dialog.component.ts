@@ -53,25 +53,38 @@ export class MovieDialogComponent {
    * =======
    */
 
-  async submit() {
+  /**
+   * Update the changes made in movie
+   */
+  submit() {
     this.submitted = true;
-    this.formGroup.markAllAsTouched();
-    if (this.formGroup.valid) {
-      if (this.data.movie?.id) {
-        await this.moviesService.edit(
-          this.data.movie.id.toString(),
-          this.formGroup.value as any
-        );
-      } else {
-        await this.moviesService.create(this.formGroup.value as any);
-      }
-      this.dialogRef.close();
+    // If form is invalid show errors
+    if (this.formGroup.invalid) {
+      this.formGroup.markAllAsTouched();
+      return;
+    }
+    // Form is valid
+    if (this.data.movie?.id) {
+      this._updateMovie();
+    } else {
+      this._createMovie();
     }
   }
 
-  async delete() {
-    await this.moviesService.delete(this.data.movie.id);
-    this.dialogRef.close();
+  /**
+   * Delete movie
+   */
+  delete() {
+    this.moviesService.delete(this.data.movie.id).subscribe((response) => {
+      this.dialogRef.close();
+    }, (err: Error) => {
+      let error: InternalError = {
+        friendlyMessage: `Unable to delete movie, please try again later!`,
+        message: err.message,
+        priority: ERROR_PRIORITY.CRITICAL
+      };
+      this.errorService.handle(error);
+    })
   }
 
   /**
@@ -79,6 +92,41 @@ export class MovieDialogComponent {
    * PRIVATE METHODS
    * =======
    */
+
+  /**
+   * Create movie
+   */
+  private _createMovie() {
+    this.moviesService.create(this.formGroup.value as any).subscribe((response) => {
+      this.dialogRef.close();
+    }, (err: Error) => {
+      let error: InternalError = {
+        friendlyMessage: `Unable to get create movie, please try again later!`,
+        message: err.message,
+        priority: ERROR_PRIORITY.MAJOR
+      };
+      this.errorService.handle(error);
+    });
+  }
+
+  /**
+   * Update movie
+   */
+  private _updateMovie() {
+    this.moviesService.update(
+      this.data.movie.id.toString(),
+      this.formGroup.value as any
+    ).subscribe((response) => {
+      this.dialogRef.close();
+    }, (err: Error) => {
+      let error: InternalError = {
+        friendlyMessage: `Unable to get update movie, please try again later!`,
+        message: err.message,
+        priority: ERROR_PRIORITY.MAJOR
+      };
+      this.errorService.handle(error);
+    });
+  }
 
   /**
    * Gets actors based on current page and filter
