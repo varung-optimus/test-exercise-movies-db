@@ -1,29 +1,47 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { actor } from './actor.model';
+import { Actor } from './types/actor.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class actorsService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  getAll(page: string, filter?: { name: string }): Promise<actor[]> {
-    let url = 'http://localhost:3000/actors';
+  /**
+   * Get all actors based on pagination and applied filter
+   * @param page page index
+   * @param filter filter query
+   * @returns actors
+   */
+  getActors(page: string, filter?: { name: string }): Promise<Actor[]> {
+    let url = `${environment.domain}${environment.api.actors}`;
+    // apply filter to url (if applicable)
     if (filter?.name) {
       url += `?name_like=${filter.name}`;
     }
     return firstValueFrom(this.http.get(url)) as any;
   }
 
-  getSingle(id: string): Promise<actor> {
+  /**
+  * Get a actor by id
+  * @param id 
+  * @returns 
+  */
+  getActorById(id: string): Promise<Actor> {
     return firstValueFrom(
-      this.http.get('http://localhost:3000/actors/' + id)
+      this.http.get(`${environment.domain}${environment.api.actors}/${id}`)
     ) as any;
   }
 
-  create(actor: Partial<actor>): Promise<actor> {
+  /**
+   * Create an actor
+   * @param actor 
+   * @returns 
+   */
+  create(actor: Partial<Actor>): Promise<Actor> {
     return firstValueFrom(
-      this.http.post('http://localhost:3000/actors', actor)
+      this.http.post(`${environment.domain}${environment.api.actors}`, actor)
     ) as any;
   }
 }

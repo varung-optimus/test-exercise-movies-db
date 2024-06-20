@@ -2,10 +2,10 @@ import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { actorsService } from '../actors.service';
-import { actor } from 'src/app/actors/actor.model';
+import { Actor } from 'src/app/actors/types/actor.model';
 
 export interface DialogData {
-  actor: actor;
+  actor: Actor;
 }
 
 @Component({

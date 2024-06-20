@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { actor } from '../actor.model';
+import { Actor } from '../types/actor.model';
 import { actorsService } from '../actors.service';
 import { ActorDialogComponent } from './../actor-dialog/actor-dialog.component';
 
@@ -10,7 +10,7 @@ import { ActorDialogComponent } from './../actor-dialog/actor-dialog.component';
   styleUrls: ['./actors.component.scss'],
 })
 export class ActorsComponent {
-  actors: actor[] = [];
+  actors: Actor[] = [];
   private search = '';
 
   constructor(
@@ -19,13 +19,13 @@ export class ActorsComponent {
   ) {}
 
   async ngOnInit() {
-    const actors = await this.actorsService.getAll('1');
+    const actors = await this.actorsService.getActors('1');
     this.actors = actors;
   }
 
   async onSearchChange(e: Event) {
     this.search = (e.target as HTMLInputElement).value;
-    this.actors = await this.actorsService.getAll('1', {
+    this.actors = await this.actorsService.getActors('1', {
       name: this.search,
     });
   }
@@ -37,7 +37,7 @@ export class ActorsComponent {
       })
       .afterClosed()
       .subscribe(async () => {
-        this.actors = await this.actorsService.getAll('1', {
+        this.actors = await this.actorsService.getActors('1', {
           name: this.search,
         });
       });

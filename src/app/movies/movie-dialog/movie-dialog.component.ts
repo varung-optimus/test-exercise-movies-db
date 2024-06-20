@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { actor } from '../../actors/actor.model';
+import { Actor } from '../../actors/types/actor.model';
 import { actorsService } from '../../actors/actors.service';
 import { Movie } from '../types/movie.model';
 import { moviesService } from './../movies.service';
@@ -16,7 +16,7 @@ export interface DialogData {
   styleUrls: ['./movie-dialog.component.scss'],
 })
 export class MovieDialogComponent {
-  public actors: actor[] = [];
+  public actors: Actor[] = [];
   public submitted = false;
   public formGroup = new FormGroup({
     title: new FormControl('', [Validators.required]),
@@ -34,7 +34,7 @@ export class MovieDialogComponent {
   }
 
   async ngOnInit() {
-    this.actors = await this.actorsService.getAll('1');
+    this.actors = await this.actorsService.getActors('1');
   }
 
   async submit() {
