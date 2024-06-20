@@ -95,8 +95,6 @@ Below are the main architectural changes done:
 - [ ] Unit tests and e2e automation can be implemented to support sanity test.
 - [ ] Performance testing and reporting via Google page speed / GTMetrix.
 
-See the [open issues](https://github.com/varung-optimus/test-exercise-movies-db/issues) for a full list of proposed features (and known issues).
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
