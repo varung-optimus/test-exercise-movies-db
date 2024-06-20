@@ -1,45 +1,120 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Actor } from '../types/actor.model';
 import { actorsService } from '../actors.service';
 import { ActorDialogComponent } from './../actor-dialog/actor-dialog.component';
+import { ERROR_PRIORITY, InternalError } from 'src/app/shared/types/error.model';
+import { ErrorHandlerService } from 'src/app/shared/error-handler.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActorFilter, DEFAULT_ACTOR_FILTER } from '../types/actor-filter.model';
+import { Subscription, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-actors',
   templateUrl: './actors.component.html',
   styleUrls: ['./actors.component.scss'],
 })
-export class ActorsComponent {
+export class ActorsComponent implements OnDestroy {
   actors: Actor[] = [];
+  pageIndex = 1;
+  filter: ActorFilter = DEFAULT_ACTOR_FILTER;
+  dialogWidth = '300px';
+  debounceTime = 500;
+  filterForm: FormGroup = this.formBuilder.group({
+    name: [this.filter.name]
+  });
+
+  // Private
   private search = '';
+  private keyChangesSubscription: Subscription | undefined;
 
   constructor(
     private actorsService: actorsService,
-    private dialog: MatDialog
-  ) {}
-
-  async ngOnInit() {
-    const actors = await this.actorsService.getActors('1');
-    this.actors = actors;
+    private dialog: MatDialog,
+    private errorService: ErrorHandlerService,
+    private formBuilder: FormBuilder,
+  ) {
+    this._subscribeToControlKeyChanges('name');
   }
 
-  async onSearchChange(e: Event) {
-    this.search = (e.target as HTMLInputElement).value;
-    this.actors = await this.actorsService.getActors('1', {
-      name: this.search,
+  /**
+   * ====
+   * LIFECYCLE EVENTS
+   * ====
+   */
+
+  ngOnInit() {
+    this._getActors();
+  }
+
+  ngOnDestroy(): void {
+    if (this.keyChangesSubscription) {
+      this.keyChangesSubscription.unsubscribe();
+    }
+  }
+
+  /**
+   * =======
+   * PUBLIC METHODS
+   * =======
+   */
+
+  /**
+   * Add a new actor
+   */
+  add() {
+    this.dialog
+      .open(ActorDialogComponent, {
+        minWidth: this.dialogWidth,
+      })
+      .afterClosed()
+      .subscribe(() => {
+        this._getActors();
+      });
+  }
+
+  /**
+   * =======
+   * PRIVATE METHODS
+   * =======
+   */
+
+  /**
+   * Starts a subscription for key changes on the dynamic control
+   * @param controlName control name
+   */
+  private _subscribeToControlKeyChanges(controlName: string) {
+    this.keyChangesSubscription = this.filterForm.controls[controlName].valueChanges.pipe(
+      debounceTime(this.debounceTime)
+    ).subscribe(value => {
+      this.filter[controlName as keyof ActorFilter] = value;
+      this._getActors();
     });
   }
 
-  addNew() {
-    this.dialog
-      .open(ActorDialogComponent, {
-        minWidth: '300px',
-      })
-      .afterClosed()
-      .subscribe(async () => {
-        this.actors = await this.actorsService.getActors('1', {
-          name: this.search,
-        });
-      });
+  /**
+   * Gets actors based on current page and filter
+   */
+  private _getActors() {
+    this.actorsService.getActors(this.pageIndex, this._getFilter()).subscribe((response) => {
+      this.actors = response;
+    }, (err: Error) => {
+      let error: InternalError = {
+        friendlyMessage: `Unable to get actors, please try again later!`,
+        message: err.message,
+        priority: ERROR_PRIORITY.CRITICAL
+      };
+      this.errorService.handle(error);
+    });
+  }
+
+  /**
+   * Gets applied filter object
+   * @returns 
+   */
+  private _getFilter() {
+    return {
+      name: this.filterForm.controls['name'].value
+    }
   }
 }

@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { Observable, firstValueFrom, map } from 'rxjs';
 import { Actor } from './types/actor.model';
 import { environment } from 'src/environments/environment';
+import { ActorFilter } from './types/actor-filter.model';
 
 @Injectable({ providedIn: 'root' })
 export class actorsService {
@@ -14,13 +15,15 @@ export class actorsService {
    * @param filter filter query
    * @returns actors
    */
-  getActors(page: string, filter?: { name: string }): Promise<Actor[]> {
+  getActors(page: number, filter?: ActorFilter): Observable<Actor[]> {
     let url = `${environment.domain}${environment.api.actors}`;
     // apply filter to url (if applicable)
     if (filter?.name) {
       url += `?name_like=${filter.name}`;
     }
-    return firstValueFrom(this.http.get(url)) as any;
+    return this.http.get(url).pipe(
+      map(response => <Actor[]>response)
+    );
   }
 
   /**

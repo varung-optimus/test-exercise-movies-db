@@ -33,8 +33,8 @@ export class MovieDialogComponent {
     this.formGroup.patchValue({ ...this.data.movie });
   }
 
-  async ngOnInit() {
-    this.actors = await this.actorsService.getActors('1');
+  ngOnInit() {
+    this.actorsService.getActors(1);
   }
 
   async submit() {
