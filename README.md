@@ -23,7 +23,9 @@
     ·
     <a href="https://github.com/varung-optimus/test-exercise-movies-db/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
+  **Note: Demo will only work if you have local api running using json-server**
 </div>
+
 
 
 <!-- ABOUT THE PROJECT -->
