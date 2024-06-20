@@ -20,6 +20,6 @@
       <option *ngFor="let a of actors" [value]="a.name">{{ a.name }}</option>
     </select>
     <button (click)="submit()" class="submit">Save!</button>
-    <button (click)="delete()" class="submit">Delete!</button>
+    <button *ngif="data.movie?.id" (click)="delete()" class="submit">Delete!</button>
   </form>
 </div>
