@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { movie } from "../movie.model";
-import { moviesService } from "../movies.service";
-import { MovieDialogComponent } from "./movie-dialog.component";
+import { movie } from "./../movie.model";
+import { moviesService } from "./../movies.service";
+import { MovieDialogComponent } from "./../movie-dialog/movie-dialog.component";
 
 @Component({
   selector: "app-movies",
