@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Actor } from '../../../actors/types/actor.model';
@@ -21,7 +21,7 @@ export class MovieDialogComponent {
   public actors: Actor[] = [];
   public submitted = false;
   public pageIndex = 1;
-  public formGroup = new FormGroup({
+  public movieForm = new FormGroup({
     title: new FormControl('', [Validators.required]),
     year: new FormControl(0, []),
     actors: new FormControl([] as any, []),
@@ -34,7 +34,7 @@ export class MovieDialogComponent {
     private dialogRef: MatDialogRef<MovieDialogComponent>,
     private errorService: ErrorHandlerService
   ) {
-    this.formGroup.patchValue({ ...this.data.movie });
+    this.movieForm.patchValue({ ...this.data.movie });
   }
 
   /**
@@ -59,8 +59,8 @@ export class MovieDialogComponent {
   submit() {
     this.submitted = true;
     // If form is invalid show errors
-    if (this.formGroup.invalid) {
-      this.formGroup.markAllAsTouched();
+    if (this.movieForm.invalid) {
+      this.movieForm.markAllAsTouched();
       return;
     }
     // Form is valid
@@ -97,7 +97,7 @@ export class MovieDialogComponent {
    * Create movie
    */
   private _createMovie() {
-    this.moviesService.create(this.formGroup.value as any).subscribe((response) => {
+    this.moviesService.create(this.movieForm.value as any).subscribe((response) => {
       this.dialogRef.close();
     }, (err: Error) => {
       let error: InternalError = {
@@ -115,7 +115,7 @@ export class MovieDialogComponent {
   private _updateMovie() {
     this.moviesService.update(
       this.data.movie.id.toString(),
-      this.formGroup.value as any
+      this.movieForm.value as any
     ).subscribe((response) => {
       this.dialogRef.close();
     }, (err: Error) => {
