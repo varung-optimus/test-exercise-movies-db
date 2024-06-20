@@ -1,10 +1,10 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Actor } from '../../actors/types/actor.model';
-import { actorsService } from '../../actors/actors.service';
-import { Movie } from '../types/movie.model';
-import { moviesService } from './../movies.service';
+import { Actor } from '../../../actors/types/actor.model';
+import { ActorsService } from '../../../actors/actors.service';
+import { Movie } from '../../types/movie.model';
+import { MoviesService } from '../../movies.service';
 import { ERROR_PRIORITY, InternalError } from 'src/app/shared/types/error.model';
 import { ErrorHandlerService } from 'src/app/shared/error-handler.service';
 
@@ -21,7 +21,7 @@ export class MovieDialogComponent {
   public actors: Actor[] = [];
   public submitted = false;
   public pageIndex = 1;
-  public formGroup = new FormGroup({
+  public movieForm = new FormGroup({
     title: new FormControl('', [Validators.required]),
     year: new FormControl(0, []),
     actors: new FormControl([] as any, []),
@@ -29,12 +29,12 @@ export class MovieDialogComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private moviesService: moviesService,
-    private actorsService: actorsService,
+    private moviesService: MoviesService,
+    private actorsService: ActorsService,
     private dialogRef: MatDialogRef<MovieDialogComponent>,
     private errorService: ErrorHandlerService
   ) {
-    this.formGroup.patchValue({ ...this.data.movie });
+    this.movieForm.patchValue({ ...this.data.movie });
   }
 
   /**
@@ -59,8 +59,8 @@ export class MovieDialogComponent {
   submit() {
     this.submitted = true;
     // If form is invalid show errors
-    if (this.formGroup.invalid) {
-      this.formGroup.markAllAsTouched();
+    if (this.movieForm.invalid) {
+      this.movieForm.markAllAsTouched();
       return;
     }
     // Form is valid
@@ -75,7 +75,7 @@ export class MovieDialogComponent {
    * Delete movie
    */
   delete() {
-    this.moviesService.delete(this.data.movie.id).subscribe((response) => {
+    this.moviesService.delete(this.data.movie.id).subscribe((response: Movie) => {
       this.dialogRef.close();
     }, (err: Error) => {
       let error: InternalError = {
@@ -97,7 +97,7 @@ export class MovieDialogComponent {
    * Create movie
    */
   private _createMovie() {
-    this.moviesService.create(this.formGroup.value as any).subscribe((response) => {
+    this.moviesService.create(this.movieForm.value as any).subscribe((response: Movie) => {
       this.dialogRef.close();
     }, (err: Error) => {
       let error: InternalError = {
@@ -115,8 +115,8 @@ export class MovieDialogComponent {
   private _updateMovie() {
     this.moviesService.update(
       this.data.movie.id.toString(),
-      this.formGroup.value as any
-    ).subscribe((response) => {
+      this.movieForm.value as any
+    ).subscribe((response: Movie) => {
       this.dialogRef.close();
     }, (err: Error) => {
       let error: InternalError = {
@@ -132,7 +132,7 @@ export class MovieDialogComponent {
    * Gets actors based on current page and filter
    */
   private _getActors() {
-    this.actorsService.getActors(this.pageIndex).subscribe((response) => {
+    this.actorsService.getActors(this.pageIndex).subscribe((response: Actor[]) => {
       this.actors = response;
     }, (err: Error) => {
       let error: InternalError = {
