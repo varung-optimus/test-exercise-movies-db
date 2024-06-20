@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { actorsService } from '../../actors.service';
+import { ActorsService } from '../../actors.service';
 import { Actor } from 'src/app/actors/types/actor.model';
 import { ERROR_PRIORITY, InternalError } from 'src/app/shared/types/error.model';
 import { ErrorHandlerService } from 'src/app/shared/error-handler.service';
@@ -23,7 +23,7 @@ export class ActorDialogComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private actorsService: actorsService,
+    private actorsService: ActorsService,
     private dialogRef: MatDialogRef<ActorDialogComponent>,
     private errorService: ErrorHandlerService
   ) { }

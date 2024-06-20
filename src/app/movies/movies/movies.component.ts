@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Movie } from "../types/movie.model";
-import { moviesService } from "./../movies.service";
+import { MoviesService } from "./../movies.service";
 import { MovieDialogComponent } from "../helpers/movie-dialog/movie-dialog.component";
 import { DEFAULT_MOVIE_FILTER, MovieFilter } from "../types/movie-filter.model";
 import { ErrorHandlerService } from "src/app/shared/error-handler.service";
@@ -31,7 +31,7 @@ export class MoviesComponent implements OnDestroy {
   private keyChangesSubscriptions: Subscription[] = [];
 
   constructor(
-    private moviesService: moviesService,
+    private moviesService: MoviesService,
     private dialog: MatDialog,
     private errorService: ErrorHandlerService,
     private formBuilder: FormBuilder

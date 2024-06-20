@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { MovieFilter } from './types/movie-filter.model';
 
 @Injectable({ providedIn: 'root' })
-export class moviesService {
+export class MoviesService {
   constructor(private http: HttpClient) { }
 
   /**

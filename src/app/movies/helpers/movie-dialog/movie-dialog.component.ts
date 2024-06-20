@@ -2,9 +2,9 @@ import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Actor } from '../../../actors/types/actor.model';
-import { actorsService } from '../../../actors/actors.service';
+import { ActorsService } from '../../../actors/actors.service';
 import { Movie } from '../../types/movie.model';
-import { moviesService } from '../../movies.service';
+import { MoviesService } from '../../movies.service';
 import { ERROR_PRIORITY, InternalError } from 'src/app/shared/types/error.model';
 import { ErrorHandlerService } from 'src/app/shared/error-handler.service';
 
@@ -29,8 +29,8 @@ export class MovieDialogComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private moviesService: moviesService,
-    private actorsService: actorsService,
+    private moviesService: MoviesService,
+    private actorsService: ActorsService,
     private dialogRef: MatDialogRef<MovieDialogComponent>,
     private errorService: ErrorHandlerService
   ) {
@@ -75,7 +75,7 @@ export class MovieDialogComponent {
    * Delete movie
    */
   delete() {
-    this.moviesService.delete(this.data.movie.id).subscribe((response) => {
+    this.moviesService.delete(this.data.movie.id).subscribe((response: Movie) => {
       this.dialogRef.close();
     }, (err: Error) => {
       let error: InternalError = {
@@ -97,7 +97,7 @@ export class MovieDialogComponent {
    * Create movie
    */
   private _createMovie() {
-    this.moviesService.create(this.movieForm.value as any).subscribe((response) => {
+    this.moviesService.create(this.movieForm.value as any).subscribe((response: Movie) => {
       this.dialogRef.close();
     }, (err: Error) => {
       let error: InternalError = {
@@ -116,7 +116,7 @@ export class MovieDialogComponent {
     this.moviesService.update(
       this.data.movie.id.toString(),
       this.movieForm.value as any
-    ).subscribe((response) => {
+    ).subscribe((response: Movie) => {
       this.dialogRef.close();
     }, (err: Error) => {
       let error: InternalError = {
@@ -132,7 +132,7 @@ export class MovieDialogComponent {
    * Gets actors based on current page and filter
    */
   private _getActors() {
-    this.actorsService.getActors(this.pageIndex).subscribe((response) => {
+    this.actorsService.getActors(this.pageIndex).subscribe((response: Actor[]) => {
       this.actors = response;
     }, (err: Error) => {
       let error: InternalError = {

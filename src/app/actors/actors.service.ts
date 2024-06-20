@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { ActorFilter } from './types/actor-filter.model';
 
 @Injectable({ providedIn: 'root' })
-export class actorsService {
+export class ActorsService {
   constructor(private http: HttpClient) { }
 
   /**

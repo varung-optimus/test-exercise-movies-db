@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Actor } from '../types/actor.model';
-import { actorsService } from '../actors.service';
+import { ActorsService } from '../actors.service';
 import { ActorDialogComponent } from '../helpers/actor-dialog/actor-dialog.component';
 import { ERROR_PRIORITY, InternalError } from 'src/app/shared/types/error.model';
 import { ErrorHandlerService } from 'src/app/shared/error-handler.service';
@@ -29,7 +29,7 @@ export class ActorsComponent implements OnDestroy {
   private keyChangesSubscription: Subscription | undefined;
 
   constructor(
-    private actorsService: actorsService,
+    private actorsService: ActorsService,
     private dialog: MatDialog,
     private errorService: ErrorHandlerService,
     private formBuilder: FormBuilder,
