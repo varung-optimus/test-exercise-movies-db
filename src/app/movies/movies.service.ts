@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, firstValueFrom } from 'rxjs';
+import { Observable, firstValueFrom, map, of } from 'rxjs';
 import { Movie } from './types/movie.model';
 import { environment } from 'src/environments/environment.development';
 import { MovieFilter } from './types/movie-filter.model';
@@ -21,7 +21,9 @@ export class moviesService {
   ): Observable<Movie[]> {
     let url = `${environment.domain}${environment.api.movies}`;
     url = this._getFilterAppliedUrl(filter, url);
-    return firstValueFrom(this.http.get(url)) as any;
+    return this.http.get(url).pipe(
+      map(response => <Movie[]>response)
+    );
   }
 
   /**
@@ -97,6 +99,6 @@ export class moviesService {
             break;
         }
       });
-      return baseUrl;
+    return baseUrl;
   }
 }
