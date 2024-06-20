@@ -4,6 +4,8 @@ import { Movie } from "../types/movie.model";
 import { moviesService } from "./../movies.service";
 import { MovieDialogComponent } from "./../movie-dialog/movie-dialog.component";
 import { DEFAULT_MOVIE_FILTER, MovieFilter } from "../types/movie-filter.model";
+import { errorHandlerService } from "src/app/shared/error-handler.service";
+import { ERROR_PRIORITY, InternalError } from "src/app/shared/types/error.model";
 
 @Component({
   selector: "app-movies",
@@ -17,12 +19,24 @@ export class MoviesComponent {
 
   constructor(
     private moviesService: moviesService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private errorService: errorHandlerService
   ) { }
 
+  /**
+   * ====
+   * LIFECYCLE EVENTS
+   * ====
+   */
   ngOnInit() {
     this._getMovies();
   }
+
+  /**
+   * =======
+   * PUBLIC METHODS
+   * =======
+   */
 
   preview(id: number) {
     const selectedMovie = this.movies.find((m) => m.id === id);
@@ -73,6 +87,12 @@ export class MoviesComponent {
   private _getMovies() {
     this.moviesService.getMovies(this.pageIndex, this.filter).subscribe((response) => {
       this.movies = response;
+    }, (err: Error) => {
+      let error: InternalError = {
+        message: err.message,
+        priority: ERROR_PRIORITY.CRITICAL
+      };
+      this.errorService.handle(error);
     });
   }
 }
