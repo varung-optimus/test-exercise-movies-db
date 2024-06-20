@@ -38,15 +38,18 @@ export class MoviesComponent {
    * =======
    */
 
+  /**
+   * Preview a movie
+   * @param id 
+   */
   preview(id: number) {
-    const selectedMovie = this.movies.find((m) => m.id === id);
     this.dialog
       .open(MovieDialogComponent, {
         minWidth: "300px",
-        data: { movie: selectedMovie },
+        data: { movie: this._findMovieById(id) },
       })
       .afterClosed()
-      .subscribe(async () => {
+      .subscribe(() => {
         this._getMovies();
       });
   }
@@ -94,5 +97,14 @@ export class MoviesComponent {
       };
       this.errorService.handle(error);
     });
+  }
+
+  /**
+   * Find a movie by id
+   * @param id 
+   * @returns movie
+   */
+  private _findMovieById(id: number) {
+    return this.movies.find((m) => m.id === id);
   }
 }
