@@ -31,10 +31,10 @@ export class actorsService {
   * @param id 
   * @returns 
   */
-  getActorById(id: string): Promise<Actor> {
-    return firstValueFrom(
-      this.http.get(`${environment.domain}${environment.api.actors}/${id}`)
-    ) as any;
+  getActorById(id: string): Observable<Actor> {
+    return this.http.get(`${environment.domain}${environment.api.actors}/${id}`).pipe(
+      map(response => <Actor>response)
+    );
   }
 
   /**
@@ -42,9 +42,9 @@ export class actorsService {
    * @param actor 
    * @returns 
    */
-  create(actor: Partial<Actor>): Promise<Actor> {
-    return firstValueFrom(
-      this.http.post(`${environment.domain}${environment.api.actors}`, actor)
-    ) as any;
+  create(actor: Partial<Actor>): Observable<Actor> {
+    return this.http.post(`${environment.domain}${environment.api.actors}`, actor).pipe(
+      map(response => <Actor>response)
+    );
   }
 }
