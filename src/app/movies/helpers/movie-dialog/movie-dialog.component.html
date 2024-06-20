@@ -1,0 +1,34 @@
+<div class="modal-content">
+  <h2 *ngIf="!data.movie?.id">Add new movie</h2>
+  <h2 *ngIf="data.movie?.id">Edit movie with id = {{ data.movie.id }}</h2>
+
+  <form [formGroup]="movieForm">
+    <div>
+      <input placeholder="title" type="text" formControlName="title"
+        [class.error]="submitted && movieForm.get('title')?.errors" />
+
+      <div
+        *ngIf="movieForm.controls['title'].invalid && (movieForm.controls['title'].dirty || movieForm.controls['title'].touched)"
+        class="text-error">
+        <label *ngIf="movieForm.controls['title'].hasError('required')">
+          * Title is required
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <input placeholder="year" type="number" formControlName="year"
+        [class.error]="submitted && movieForm.get('year')?.errors" />
+    </div>
+
+    <div>
+      <select multiple placeholder="actors" formControlName="actors">
+        <option value="" disabled selected>Select actors</option>
+        <option *ngFor="let a of actors" [value]="a.name">{{ a.name }}</option>
+      </select>
+    </div>
+    <button (click)="submit()" class="submit">Save!</button>
+    <button *ngIf="data.movie?.id" (click)="delete()" class="submit">Delete!</button>
+
+  </form>
+</div>

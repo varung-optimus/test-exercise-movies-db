@@ -1,0 +1,7 @@
+input,
+input.ng-invalid,
+select {
+  &.error {
+    border-color: $error-color;
+  }
+}

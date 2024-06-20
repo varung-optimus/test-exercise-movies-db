@@ -1,0 +1,8 @@
+.filters {
+    display: flex;
+    margin-bottom: $unit * 3;
+}
+
+.filters>* {
+    margin-right: $unit * 3;
+}
