@@ -18,7 +18,7 @@ export class moviesService {
   getMovies(
     page: number,
     filter: MovieFilter
-  ): Promise<Movie[]> {
+  ): Observable<Movie[]> {
     let url = `${environment.domain}${environment.api.movies}`;
     url = this._getFilterAppliedUrl(filter, url);
     return firstValueFrom(this.http.get(url)) as any;

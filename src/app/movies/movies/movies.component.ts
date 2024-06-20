@@ -18,11 +18,10 @@ export class MoviesComponent {
   constructor(
     private moviesService: moviesService,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
-  async ngOnInit() {
-    const movies = await this.moviesService.getMovies(this.pageIndex, this.filter);
-    this.movies = movies;
+  ngOnInit() {
+    this._getMovies();
   }
 
   preview(id: number) {
@@ -34,14 +33,13 @@ export class MoviesComponent {
       })
       .afterClosed()
       .subscribe(async () => {
-        this.movies = await this.moviesService.getMovies(this.pageIndex, this.filter);
+        this._getMovies();
       });
   }
 
   async delete(id: number) {
     await this.moviesService.delete(id.toString());
-    const movies = await this.moviesService.getMovies(this.pageIndex, this.filter);
-    this.movies = movies;
+    this._getMovies();
   }
 
   add() {
@@ -50,16 +48,31 @@ export class MoviesComponent {
 
   async onSearchChange(e: Event) {
     this.filter.title = (e.target as HTMLInputElement).value;
-    this.movies = await this.moviesService.getMovies(this.pageIndex, this.filter);
+    this._getMovies();
   }
 
   async onYearChange(e: Event) {
     this.filter.year = +(e.target as HTMLInputElement).value;
-    this.movies = await this.moviesService.getMovies(this.pageIndex, this.filter);
+    this._getMovies();
   }
 
   async onRateChange(e: Event) {
     this.filter.rate = +(e.target as HTMLInputElement).value;
-    this.movies = await this.moviesService.getMovies(this.pageIndex, this.filter);
+    this._getMovies();
+  }
+
+  /**
+   * =======
+   * PRIVATE METHODS
+   * =======
+   */
+
+  /**
+   * Gets movies based on current page and filter
+   */
+  private _getMovies() {
+    this.moviesService.getMovies(this.pageIndex, this.filter).subscribe((response) => {
+      this.movies = response;
+    });
   }
 }
