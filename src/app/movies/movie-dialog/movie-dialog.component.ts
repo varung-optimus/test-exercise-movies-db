@@ -5,6 +5,8 @@ import { Actor } from '../../actors/types/actor.model';
 import { actorsService } from '../../actors/actors.service';
 import { Movie } from '../types/movie.model';
 import { moviesService } from './../movies.service';
+import { ERROR_PRIORITY, InternalError } from 'src/app/shared/types/error.model';
+import { ErrorHandlerService } from 'src/app/shared/error-handler.service';
 
 export interface DialogData {
   movie: Movie;
@@ -18,6 +20,7 @@ export interface DialogData {
 export class MovieDialogComponent {
   public actors: Actor[] = [];
   public submitted = false;
+  public pageIndex = 1;
   public formGroup = new FormGroup({
     title: new FormControl('', [Validators.required]),
     year: new FormControl(0, []),
@@ -28,14 +31,27 @@ export class MovieDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private moviesService: moviesService,
     private actorsService: actorsService,
-    private dialogRef: MatDialogRef<MovieDialogComponent>
+    private dialogRef: MatDialogRef<MovieDialogComponent>,
+    private errorService: ErrorHandlerService
   ) {
     this.formGroup.patchValue({ ...this.data.movie });
   }
 
+  /**
+   * ====
+   * LIFECYCLE EVENTS
+   * ====
+   */
+
   ngOnInit() {
-    this.actorsService.getActors(1);
+    this._getActors();
   }
+
+  /**
+   * =======
+   * PUBLIC METHODS
+   * =======
+   */
 
   async submit() {
     this.submitted = true;
@@ -56,5 +72,27 @@ export class MovieDialogComponent {
   async delete() {
     await this.moviesService.delete(this.data.movie.id);
     this.dialogRef.close();
+  }
+
+  /**
+   * =======
+   * PRIVATE METHODS
+   * =======
+   */
+
+  /**
+   * Gets actors based on current page and filter
+   */
+  private _getActors() {
+    this.actorsService.getActors(this.pageIndex).subscribe((response) => {
+      this.actors = response;
+    }, (err: Error) => {
+      let error: InternalError = {
+        friendlyMessage: `Unable to get actors, please try again later!`,
+        message: err.message,
+        priority: ERROR_PRIORITY.CRITICAL
+      };
+      this.errorService.handle(error);
+    });
   }
 }
