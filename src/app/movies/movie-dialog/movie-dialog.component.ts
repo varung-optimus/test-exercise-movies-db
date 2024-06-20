@@ -3,11 +3,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { actor } from '../../actors/actor.model';
 import { actorsService } from '../../actors/actors.service';
-import { movie } from '../movie.model';
+import { Movie } from '../types/movie.model';
 import { moviesService } from './../movies.service';
 
 export interface DialogData {
-  movie: movie;
+  movie: Movie;
 }
 
 @Component({
@@ -54,7 +54,7 @@ export class MovieDialogComponent {
   }
 
   async delete() {
-    await this.moviesService.delete(this.data.movie.id.toString());
+    await this.moviesService.delete(this.data.movie.id);
     this.dialogRef.close();
   }
 }
