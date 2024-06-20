@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { actor } from '../actor.model';
 import { actorsService } from '../actors.service';
-import { ActorDialogComponent } from './actor-dialog.component';
+import { ActorDialogComponent } from './../actor-dialog/actor-dialog.component';
 
 @Component({
   selector: 'app-actors',

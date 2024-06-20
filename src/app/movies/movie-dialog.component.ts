@@ -1,8 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { actor } from '../actor.model';
-import { actorsService } from '../actors.service';
+import { actor } from '../actors/actor.model';
+import { actorsService } from './../actors/actors.service';
 import { movie } from '../movie.model';
 import { moviesService } from '../movies.service';
 

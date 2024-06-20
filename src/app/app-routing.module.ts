@@ -1,11 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ActorsComponent } from './actors/actors.component';
-import { MoviesComponent } from './movies/movies.component';
 
 const routes: Routes = [
-  { path: 'movies', component: MoviesComponent },
-  { path: 'actors', component: ActorsComponent },
+  {
+    path: 'movies',
+    loadChildren: () => import('./movies/movies.module').then(m => m.MoviesModule)
+  },
+  {
+    path: 'actors',
+    loadChildren: () => import('./actors/actors.module').then(m => m.ActorsModule)
+  },
   { path: '', redirectTo: '/movies', pathMatch: 'full' },
 ];
 
@@ -13,4 +17,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
