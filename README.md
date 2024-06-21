@@ -39,7 +39,7 @@
 
 ### Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+The project uses below tech stack
 
 [![Angular][Angular.io]][Angular-url]
 [![Typescript][Typescript.org]][Angular-url]
